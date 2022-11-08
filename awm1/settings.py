@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
 ]
 
 MIDDLEWARE = [
@@ -71,21 +72,22 @@ WSGI_APPLICATION = 'awm1.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# Return appropriate database host for environment
-def db_host():
+# Return appropriate database connection for environment
+def db_connection():
     if os.getenv("DOCKER", 'False').lower() in ('true', '1', 't'):
-        return "postgis"
+        return "postgis", 5432
     else:
-        return "localhost"
+        return "localhost", 25432
 
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'gis',
-        'HOST': db_host(),
+        'HOST': db_connection()[0],
         'USER': 'docker',
         'PASSWORD': 'docker',
+        'PORT': db_connection()[1],
     }
 }
 
