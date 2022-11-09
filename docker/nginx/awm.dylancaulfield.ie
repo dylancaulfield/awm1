@@ -1,0 +1,22 @@
+server {
+
+    listen 80;
+    server_name pgadmin.awm.dylancaulfield.ie;
+
+    location / {
+        proxy_pass http://pgadmin:8000;
+    }
+
+}
+
+server {
+
+    listen 80 default_server;
+    server_name awm1.dylancaulfield.ie;
+    root /app/static;
+
+    location /api {
+        proxy_pass http://django:8001;
+    }
+
+}
